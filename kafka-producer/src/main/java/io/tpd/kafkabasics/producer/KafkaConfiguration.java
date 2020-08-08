@@ -38,6 +38,16 @@ public class KafkaConfiguration {
         return TopicBuilder.name(customersTopicName)
                 .partitions(partitions)
                 .replicas(1)
+                // By default, cleanup policy is "delete"
+                .config(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT)
+                // Very low retention to make sure the consumers don't see the tombstones after compacted
+                .config(TopicConfig.DELETE_RETENTION_MS_CONFIG, "100")
+                // Reduced value to make sure there are new logs and therefore old data to compact
+                .config(TopicConfig.SEGMENT_MS_CONFIG, "100")
+                // Ratio for cleanup (log.cleaner.min.cleanable.ratio) is 0.5 by default in the broker
+                .config(TopicConfig.MIN_CLEANABLE_DIRTY_RATIO_CONFIG, "0.01")
+                // The minimum time a message will remain uncompacted in the log
+                .config(TopicConfig.MIN_COMPACTION_LAG_MS_CONFIG, "10000")
                 .build();
     }
 
