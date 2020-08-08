@@ -17,6 +17,6 @@ public class CustomerSubscriber {
             containerFactory = "kafkaListenerContainerFactory")
     public void listenAsObject(ConsumerRecord<String, Customer> cr,
                                @Payload Customer customer) {
-        log.info("[key: {}, offset:{}] Customer received via Kafka: {}", cr.offset(), cr.key(), customer);
+        log.info("[key: {}, offset:{}] Customer received via Kafka: {}", cr.key(), cr.offset(), customer);
     }
 }
